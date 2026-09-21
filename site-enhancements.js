@@ -45,7 +45,7 @@ async function loadNews() {
 }
 document.querySelectorAll('.site-footer').forEach(element => { element.innerHTML = footer; });
 loadNews().then(makeNewsBar);
-const revealTargets = document.querySelectorAll('main > section, .mosaic > *, .cards .card, .insights .insight, .feature');
+const revealTargets = document.querySelectorAll('main > section, .mosaic > *, .cards .card, .insights .insight, .feature, .service-block, .support, .trigger, .step, .article, .feature-story');
 if (matchMedia('(prefers-reduced-motion: reduce)').matches) revealTargets.forEach(element => element.classList.add('is-visible'));
 else {
   const observer = new IntersectionObserver(entries => entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }), { threshold: 0.12 });
