@@ -8,7 +8,7 @@ const translations = {
     'Answers before you need them.':'Antwoorden vóór u ze nodig hebt.', 'Basics':'Basis', 'Volume':'Volume', 'Cost':'Kosten', 'Read →':'Lees →', 'Open the knowledge area →':'Open de kennisbank →',
     'Regular contact':'Regulier contact', 'Urgent service':'Spoedservice', 'Our Rotterdam office':'Ons kantoor in Rotterdam', 'Available 24/7':'24/7 bereikbaar', 'Company video':'Bedrijfsvideo', 'See how we work.':'Zie hoe we werken.',
     'Quote planner':'Offerteplanner', 'Shipment details':'Zendinggegevens', 'Planning estimate':'Planningsinschatting', 'Send quote request →':'Offerteaanvraag versturen →',
-    'Instant route planner':'Directe routeplanner', 'Plan your container.':'Plan uw container.', 'From':'Van', 'To':'Naar', 'Container':'Container', 'Work email':'Zakelijk e-mailadres', 'Name':'Naam', 'Email this estimate →':'Stuur deze inschatting →',
+    'Instant route planner':'Directe routeplanner', 'Plan your route.':'Plan uw route.', 'From':'Van', 'To':'Naar', 'Container':'Container', 'Work email':'Zakelijk e-mailadres', 'Name':'Naam', 'Email this estimate →':'Stuur deze inschatting →',
     'Your shipment plan':'Uw zendingplan', 'Ocean transit':'Transittijd over zee', 'Port-to-port estimate':'Haven-tot-haven-inschatting', 'Select a port':'Kies een haven', 'Select two different ports for a planning estimate.':'Kies twee verschillende havens voor een planningsinschatting.',
     'FCL':'FCL', 'Latest developments from Sea and Shore.':'Laatste ontwikkelingen van Sea and Shore.', 'Knowledge for clearer decisions.':'Kennis voor heldere beslissingen.'
   },
@@ -21,7 +21,7 @@ const translations = {
     'Answers before you need them.':'Antworten, bevor Sie sie brauchen.', 'Basics':'Grundlagen', 'Volume':'Volumen', 'Cost':'Kosten', 'Read →':'Lesen →', 'Open the knowledge area →':'Wissensbereich öffnen →',
     'Regular contact':'Allgemeiner Kontakt', 'Urgent service':'Dringende Hilfe', 'Our Rotterdam office':'Unser Büro in Rotterdam', 'Available 24/7':'24/7 erreichbar', 'Company video':'Unternehmensvideo', 'See how we work.':'So arbeiten wir.',
     'Quote planner':'Angebotsplaner', 'Shipment details':'Sendungsdetails', 'Planning estimate':'Planungsschätzung', 'Send quote request →':'Angebotsanfrage senden →',
-    'Instant route planner':'Direkter Routenplaner', 'Plan your container.':'Container planen.', 'From':'Von', 'To':'Nach', 'Container':'Container', 'Work email':'Geschäftliche E-Mail', 'Name':'Name', 'Email this estimate →':'Schätzung senden →',
+    'Instant route planner':'Direkter Routenplaner', 'Plan your route.':'Route planen.', 'From':'Von', 'To':'Nach', 'Container':'Container', 'Work email':'Geschäftliche E-Mail', 'Name':'Name', 'Email this estimate →':'Schätzung senden →',
     'Your shipment plan':'Ihr Sendungsplan', 'Ocean transit':'Seetransitzeit', 'Port-to-port estimate':'Hafen-zu-Hafen-Schätzung', 'Select a port':'Hafen auswählen', 'Select two different ports for a planning estimate.':'Wählen Sie zwei verschiedene Häfen für eine Planungsschätzung.',
     'FCL':'FCL', 'Latest developments from Sea and Shore.':'Aktuelle Entwicklungen bei Sea and Shore.', 'Knowledge for clearer decisions.':'Wissen für klare Entscheidungen.'
   }
@@ -80,12 +80,14 @@ function applyPageCopy(copy) {
 }
 
 function addSwitcher() {
+  if (document.querySelector('.language-row')) return;
   document.querySelectorAll('.site-header').forEach(header => {
-    if (header.querySelector('.language-switch')) return;
     const wrap = document.createElement('details'); wrap.className = 'language-switch';
     wrap.innerHTML = `<summary aria-label="Website language">${langNames[language]}</summary><div class="language-menu">${Object.entries(langNames).map(([code, name]) => `<a href="?lang=${code}" data-language="${code}"${code === language ? ' aria-current="true"' : ''}>${name}</a>`).join('')}</div>`;
     wrap.querySelectorAll('[data-language]').forEach(link => link.addEventListener('click', () => localStorage.setItem('sea-and-shore-language', link.dataset.language)));
-    header.querySelector('.nav')?.after(wrap);
+    const row = document.createElement('div'); row.className = 'language-row';
+    const rowWrap = document.createElement('div'); rowWrap.className = 'wrap'; rowWrap.append(wrap); row.append(rowWrap);
+    document.querySelector('main')?.before(row);
   });
 }
 
