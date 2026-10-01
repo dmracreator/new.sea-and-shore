@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: sea-and-shore-lead-agent
+    runtime: node
+    rootDir: automation
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: RESEND_API_KEY
+        sync: false
+      - key: MAIL_FROM
+        sync: false
+      - key: QUOTE_INBOX
+        value: pr@sea-and-shore.com
+      - key: ALLOWED_ORIGIN
+        value: https://dmracreator.github.io
+      - key: CRON_SECRET
+        generateValue: true
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-6-astra

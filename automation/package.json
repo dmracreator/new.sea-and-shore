@@ -1,0 +1,13 @@
+{
+  "name": "sea-and-shore-lead-agent",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node test-agent.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

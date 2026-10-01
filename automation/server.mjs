@@ -17,7 +17,7 @@ async function saveLeads(leads) {
   await writeFile(dataFile, JSON.stringify(leads, null, 2));
 }
 function json(res, status, value) {
-  res.writeHead(status, { 'content-type': 'application/json', 'access-control-allow-origin': process.env.ALLOWED_ORIGIN || '*' });
+  res.writeHead(status, { 'content-type': 'application/json', 'access-control-allow-origin': process.env.ALLOWED_ORIGIN || 'https://dmracreator.github.io', 'access-control-allow-methods': 'GET, POST, OPTIONS', 'access-control-allow-headers': 'content-type, authorization' });
   res.end(JSON.stringify(value));
 }
 function text(value = '') { return String(value).replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[char]); }
