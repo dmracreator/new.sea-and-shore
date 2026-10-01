@@ -82,9 +82,9 @@ function applyPageCopy(copy) {
 function addSwitcher() {
   document.querySelectorAll('.site-header').forEach(header => {
     if (header.querySelector('.language-switch')) return;
-    const wrap = document.createElement('label'); wrap.className = 'language-switch'; wrap.setAttribute('aria-label', 'Website language');
-    wrap.innerHTML = `<select aria-label="Website language">${Object.entries(langNames).map(([code, name]) => `<option value="${code}"${code === language ? ' selected' : ''}>${name}</option>`).join('')}</select>`;
-    wrap.querySelector('select').addEventListener('change', event => { localStorage.setItem('sea-and-shore-language', event.target.value); const url = new URL(location.href); url.searchParams.set('lang', event.target.value); location.href = url; });
+    const wrap = document.createElement('nav'); wrap.className = 'language-switch'; wrap.setAttribute('aria-label', 'Website language');
+    wrap.innerHTML = Object.entries(langNames).map(([code, name]) => `<a href="?lang=${code}" data-language="${code}"${code === language ? ' aria-current="page"' : ''}>${name}</a>`).join('');
+    wrap.querySelectorAll('[data-language]').forEach(link => link.addEventListener('click', () => localStorage.setItem('sea-and-shore-language', link.dataset.language)));
     header.querySelector('.nav')?.after(wrap);
   });
 }
