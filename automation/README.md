@@ -3,6 +3,7 @@
 This small Node.js service handles quote and contact leads.
 
 - Sends an immediate acknowledgement after a quote or contact form.
+- Emails every new request to `pr@sea-and-shore.com` by default (or the `QUOTE_INBOX` environment setting).
 - Schedules one booking follow-up, seven days after a quote request.
 - Produces an internal AI research brief from public information when an OpenAI API key is configured.
 - Does not send AI-written content automatically.
@@ -10,7 +11,7 @@ This small Node.js service handles quote and contact leads.
 ## Setup
 
 1. Copy `.env.example` to your deployment platform's environment settings.
-2. Verify `MAIL_FROM` in Resend and configure `RESEND_API_KEY`.
+2. Verify `MAIL_FROM` in Resend and configure `RESEND_API_KEY`. Set `QUOTE_INBOX=pr@sea-and-shore.com` if the team inbox changes.
 3. Configure the site to call the deployed service URL through `window.LEAD_AGENT_URL`.
 4. Schedule a daily POST to `/api/run-follow-ups` with `Authorization: Bearer <CRON_SECRET>`.
 

@@ -39,6 +39,10 @@ function confirmation(lead) {
   const detail = lead.source === 'quote' ? 'Our logistics team will review the route, equipment and service requirements you shared.' : 'Our team will review your message and get back to you as soon as possible.';
   return { subject, html: `<p>Dear ${text(lead.name)},</p><p>Thank you for contacting Sea and Shore Services.</p><p>${detail}</p><p>For urgent support, call +31 (0)10 409 01 30.</p><p>Kind regards,<br>Sea and Shore Services</p>` };
 }
+function teamNotification(lead) {
+  const details = Object.entries(lead.details).map(([key, value]) => `<tr><td style="padding:4px 14px 4px 0;color:#526275">${text(key)}</td><td style="padding:4px 0"><strong>${text(value)}</strong></td></tr>`).join('');
+  return { subject: `New ${lead.source} request — ${text(lead.name)}`, html: `<h2>New ${text(lead.source)} request</h2><table><tr><td style="padding:4px 14px 4px 0;color:#526275">Name</td><td><strong>${text(lead.name)}</strong></td></tr><tr><td style="padding:4px 14px 4px 0;color:#526275">Email</td><td><a href="mailto:${text(lead.email)}">${text(lead.email)}</a></td></tr><tr><td style="padding:4px 14px 4px 0;color:#526275">Company</td><td>${text(lead.company || 'Not supplied')}</td></tr><tr><td style="padding:4px 14px 4px 0;color:#526275">Phone</td><td>${text(lead.phone || 'Not supplied')}</td></tr>${details}</table>` };
+}
 function followUp(lead) {
   return { subject: 'Ready to book your shipment?', html: `<p>Dear ${text(lead.name)},</p><p>A week ago you contacted Sea and Shore about a shipment. If you are ready for the next step, our team can help you turn your plan into a booking.</p><p>We coordinate freight, documentation and customs support through one operational contact.</p><p><a href="https://www.sea-and-shore.com/contact">Talk to our team</a> or reply to this email with your latest shipment details.</p><p>If this is no longer relevant, reply and we will not send further follow-ups.</p><p>Kind regards,<br>Sea and Shore Services</p>` };
 }
@@ -61,6 +65,8 @@ async function addLead(payload, source) {
   const lead = { id: crypto.randomUUID(), source, name, email, company: String(payload.company || '').trim(), phone: String(payload.phone || '').trim(), details: payload.details || {}, createdAt: now(), followUpAt: source === 'quote' ? dueAt() : null, followUpSentAt: null, research: { status: 'queued' }, emailLog: [] };
   const mail = confirmation(lead); const delivery = await deliver({ to: lead.email, ...mail });
   lead.emailLog.push({ kind: 'confirmation', at: now(), ...delivery });
+  const notification = await deliver({ to: process.env.QUOTE_INBOX || 'pr@sea-and-shore.com', ...teamNotification(lead) });
+  lead.emailLog.push({ kind: 'team_notification', at: now(), ...notification });
   lead.research = await research(lead);
   const leads = await readLeads(); leads.push(lead); await saveLeads(leads);
   return lead;
