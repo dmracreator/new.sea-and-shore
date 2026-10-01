@@ -82,10 +82,10 @@ function applyPageCopy(copy) {
 function addSwitcher() {
   document.querySelectorAll('.site-header').forEach(header => {
     if (header.querySelector('.language-switch')) return;
-    const wrap = document.createElement('label'); wrap.className = 'language-switch'; wrap.setAttribute('aria-label', 'Website language');
-    wrap.innerHTML = `<select aria-label="Website language">${Object.entries(langNames).map(([code, name]) => `<option value="${code}"${code === language ? ' selected' : ''}>${name}</option>`).join('')}</select>`;
-    wrap.querySelector('select').addEventListener('change', event => { localStorage.setItem('sea-and-shore-language', event.target.value); const url = new URL(location.href); url.searchParams.set('lang', event.target.value); location.href = url; });
-    header.querySelector('.mobile-link')?.before(wrap);
+    const wrap = document.createElement('details'); wrap.className = 'language-switch';
+    wrap.innerHTML = `<summary aria-label="Website language">${langNames[language]}</summary><div class="language-menu">${Object.entries(langNames).map(([code, name]) => `<a href="?lang=${code}" data-language="${code}"${code === language ? ' aria-current="true"' : ''}>${name}</a>`).join('')}</div>`;
+    wrap.querySelectorAll('[data-language]').forEach(link => link.addEventListener('click', () => localStorage.setItem('sea-and-shore-language', link.dataset.language)));
+    header.querySelector('.nav')?.after(wrap);
   });
 }
 
