@@ -1,0 +1,13 @@
+# Private material and runtime data must never be published or committed.
+Application Files (important)/
+*.pem
+*.key
+*.env
+automation/data/
+
+# Working files and generated exports.
+tmp/
+work/
+output/
+*.af~lock~
+.DS_Store

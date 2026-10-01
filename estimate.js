@@ -1,0 +1,2 @@
+export const rates={"20DV":1245,"40DV":1885,"40HC":2045,"20RF":2310,"40RH":3295};
+export function estimate({container="20DV",quantity=1,customs=false,delivery=false,warehouse=false}){const freight=(rates[container]||0)*Math.max(1,Number(quantity)||1);const extras=(customs?185:0)+(delivery?450:0)+(warehouse?75:0);const total=freight+extras;return{freight,extras,total,low:Math.round(total*.9),high:Math.round(total*1.12)};}
