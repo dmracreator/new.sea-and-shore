@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://dmracreator.github.io/new.sea-and-shore/sitemap.xml
